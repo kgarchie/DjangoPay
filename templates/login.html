@@ -1,0 +1,54 @@
+﻿{% extends 'base.html' %}
+{% block title %}
+    <title>Log In</title>
+{% endblock %}
+
+{% block content %}
+    <div class="column is-4 ml-auto mr-auto">
+        <form method="post">
+            {% csrf_token %}
+            {% if error %}
+                <div class="help is-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
+            {% for field in form %}
+                <div class="field">
+                    <label for="{{ field.id_for_label }}" class="label">{{ field.label }}</label>
+                    {% if field.help_text %}
+                        <p class="help">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="{{ field.name }}" {% if field.value %}checked{% endif %}
+                                       class="input">
+                                {{ field.label }}
+                            </label>
+                        </div>
+                    {% elif field.field.widget.input_type == 'select' %}
+                        <div class="select">
+                            <select name="{{ field.name }}">
+                                {% for choice in field.field.choices %}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == field.value %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% else %}
+                        <div class="control">
+                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                                   value="{{ field.value }}" class="input" id="{{ field.id_for_label }}">
+                        </div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="help is-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+{% endblock %}

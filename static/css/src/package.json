@@ -1,0 +1,12 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "sass --watch ./scss/style.scss:../style.css"
+  },
+  "dependencies": {
+    "sass": "^1.58.3"
+  }
+}

@@ -1,0 +1,17 @@
+﻿<script>
+    const menu_list = document.getElementById('menu-list');
+
+    const menu_list_items = menu_list.querySelectorAll('li');
+    
+    menu_list_items.forEach((item) => {
+        item.addEventListener('click', (e) => {
+            let active_item = menu_list.querySelector('.is-active') || null;
+            
+            if (active_item) {
+                active_item.classList.remove('is-active');
+            }
+            
+            e.target.classList.add('is-active');
+        });
+    });
+</script>

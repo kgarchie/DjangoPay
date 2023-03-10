@@ -1,0 +1,65 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}
+    <title>Dashboard</title>
+{% endblock %}
+
+{% block content %}
+    {% include 'side_nav.html' %}
+    <div class="column">
+        <div class="panel">
+            <div class="panel-heading">
+                Transactions
+            </div>
+            <div class="panel-block">
+                <p class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Search">
+                </p>
+            </div>
+            <div class="panel-block is-flex is-justify-content-center is-flex-direction-column">
+                <table class="table is-bordered is-striped is-truncated">
+                    <thead>
+                    <tr>
+                        <th width="150">From</th>
+                        <th width="150">To</th>
+                        <th width="100">Amount</th>
+                        <th width="100">Trace</th>
+                        <th width="100">Date</th>
+                        <th width="100">Status</th>
+                        <th width="163">Disputed</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in transactions %}
+                        <tr>
+                            <td>{{ item.from }}</td>
+                            <td>{{ item.to }}</td>
+                            <td>{{ item.amount }}</td>
+                            <td>{{ item.trace }}</td>
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.status }}</td>
+                            <td>{{ item.disputed }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                    <a class="pagination-previous">Previous</a>
+                    <a class="pagination-next">Next</a>
+                    <ul class="pagination-list">
+                        {% if transactions.has_previous %}
+                            <li><a class="pagination-link" aria-label="Goto page 45"
+                                   href="?page={{ transactions.previous_page_number }}">Prev</a></li>
+                        {% endif %}
+                        <li><a class="pagination-link is-current" aria-label="Page 46"
+                               aria-current="page">{{ transactions.number }}</a></li>
+                        {% if transactions.has_next %}
+                            <li><a class="pagination-link" aria-label="Goto page 47"
+                                   href="?page={{ transactions.next_page_number }}">Next</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}

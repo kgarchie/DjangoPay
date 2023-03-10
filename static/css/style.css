@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --light: #fafafa;
+  --dark: #333;
+}
+
+#wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+main {
+  padding: 1rem;
+}
+
+.select {
+  width: 100%;
+}
+.select > * {
+  width: 100%;
+}
+
+.navbar {
+  background-color: var(--light);
+  padding: 1rem;
+}
+
+.gap-1 {
+  gap: 1em;
+}
+
+/*# sourceMappingURL=style.css.map */

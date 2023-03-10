@@ -1,0 +1,20 @@
+﻿<div class="column is-2">
+    <aside class="menu is-hidden-mobile is-flex is-flex-direction-column">
+        <p class="menu-label">
+            General
+        </p>
+        <ul class="menu-list" id="menu-list">
+            <li><a href="{% url 'pay_app:dashboard' %}">Dashboard</a></li>
+            <li><a>Notifications</a></li>
+            <li><a>Other</a>
+                <ul>
+                    <li><a href="">Transaction History</a></li>
+                    <li><a href="">Pending Money</a></li>
+                    {% if user.is_admin %}
+                        <li><a href="">All Site Transactions</a></li>
+                    {% endif %} 
+                </ul>
+            </li>
+        </ul>
+    </aside>
+</div>

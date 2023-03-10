@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'side_nav.html' %}
+    <div class="column">
+        <div class="hero">
+            <div class="hero is-info">
+                <div class="hero-body">
+                    <p class="title">
+                        Hello there {{ user.username }}!
+                    </p>
+                    <p class="subtitle">
+                        {% if user.notifications %}
+                            You have {{ user.notifications.count }} notifications.
+                        {% else %}
+                            You have no notifications.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'scripts/change_side_nav_location.html' %}
+{% endblock %}
