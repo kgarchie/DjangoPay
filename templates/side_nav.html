@@ -4,17 +4,68 @@
             General
         </p>
         <ul class="menu-list" id="menu-list">
-            <li><a href="{% url 'pay_app:dashboard' %}">Dashboard</a></li>
-            <li><a>Notifications</a></li>
+            <li><a href="{% url 'pay_app:dashboard' %}" id="dashboard">Dashboard</a></li>
+            <li><a id="notifications" href="{% url 'pay_app:notifications' %}">Notifications <span class="notification-bubble">{{ user.get_unread_notifications.count }}</span></a></li>
             <li><a>Other</a>
                 <ul>
-                    <li><a href="">Transaction History</a></li>
-                    <li><a href="">Pending Money</a></li>
+                    <li><a href="" id="pending_money">Request Payment</a></li>
                     {% if user.is_admin %}
-                        <li><a href="">All Site Transactions</a></li>
-                    {% endif %} 
+                        <li><a href="" id="admin_view_transactions">All Site Transactions</a></li>
+                    {% endif %}
                 </ul>
             </li>
         </ul>
     </aside>
 </div>
+<script>
+    // This is a workaround for the fact that Django is ssr.
+    const menu_list = document.getElementById('menu-list');
+    const menu_list_items = menu_list.querySelectorAll('li')
+    const navbar = document.getElementById('navbar');
+
+    menu_list_items.forEach((item) => {
+        item.addEventListener('click', (e) => {
+            const active_item_id = localStorage.getItem('active_item');
+
+            if (active_item_id) {
+                const active_item = document.getElementById(active_item_id);
+                active_item.classList.remove('is-active');
+                localStorage.removeItem('active_item');
+
+                if (active_item_id === e.target.id) {
+                    return;
+                }
+
+                localStorage.setItem('active_item', e.target.id);
+            }
+
+            e.target.classList.add('is-active');
+            localStorage.setItem('active_item', e.target.id);
+        });
+    });
+
+    const active_item_id = localStorage.getItem('active_item');
+    if (active_item_id) {
+        const active_item = document.getElementById(active_item_id);
+        active_item.classList.add('is-active');
+    }
+
+    // if navbar is used for navigation remove active class from menu list
+    navbar.addEventListener('click', (e) => {
+        const active_item_id = localStorage.getItem('active_item');
+        if (active_item_id) {
+            const active_item = document.getElementById(active_item_id);
+            active_item.classList.remove('is-active');
+            localStorage.removeItem('active_item');
+        }
+    });
+    
+    window.addEventListener('beforeunload', (e) => {
+        const active_item_id = localStorage.getItem('active_item');
+        if (active_item_id) {
+            const active_item = document.getElementById(active_item_id);
+            active_item.classList.remove('is-active');
+            localStorage.removeItem('active_item');
+        }
+    });
+</script>

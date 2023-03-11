@@ -1,4 +1,5 @@
 ﻿from django import forms
+
 from .models import Transaction, User
 
 
@@ -25,12 +26,11 @@ class RegisterForm(forms.ModelForm):
         self.fields['password'].widget = forms.PasswordInput()
 
 
-# create a login form
-class LoginForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
+# create a login form template
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
+        self.user = None
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['password'].widget = forms.PasswordInput()

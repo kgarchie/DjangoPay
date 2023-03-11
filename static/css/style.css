@@ -38,4 +38,19 @@ main {
   gap: 1em;
 }
 
+.stat-val {
+  font-size: 3em;
+  padding-top: 20px;
+  font-weight: bold;
+}
+
+.stat-key {
+  font-size: 1.4em;
+  font-weight: 200;
+}
+
+.section.profile-heading .column.is-2-tablet.has-text-centered + .has-text-centered {
+  border-left: 1px dotted rgba(0, 0, 0, 0.2);
+}
+
 /*# sourceMappingURL=style.css.map */

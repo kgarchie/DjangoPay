@@ -1,64 +1,106 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
+
 
 {% block title %}
     <title>Dashboard</title>
 {% endblock %}
 
 {% block content %}
-    {% include 'side_nav.html' %}
+    {% include 'side_nav.html' %}>
     <div class="column">
-        <div class="panel">
-            <div class="panel-heading">
-                Transactions
+        <div class="row">
+            <div class="section profile-heading">
+                <div class="columns is-mobile is-multiline">
+                    <div class="column is-2">
+                      <span class="header-icon user-profile-image">
+                        <img alt="" src="http://placehold.it/300x225">
+                      </span>
+                    </div>
+                    <div class="column is-4-tablet is-10-mobile name">
+                        <p>
+                            <span class="title is-bold mt-auto mb-auto">{{ user.username }}</span>
+                            <br>
+                        </p>
+                    </div>
+                    <div class="column is-2-tablet is-4-mobile has-text-centered">
+                        <p class="stat-val">{{ user.balance }}</p>
+                        <p class="stat-key">Balance</p>
+                    </div>
+                    <div class="column is-2-tablet is-4-mobile has-text-centered">
+                        <p class="stat-val">{{ user.get_transactions.count }}</p>
+                        <p class="stat-key">Transactions</p>
+                    </div>
+                    <div class="column is-2-tablet is-4-mobile has-text-centered">
+                        <p class="stat-val">{{ user.get_unread_notifications.count }}</p>
+                        <p class="stat-key">Notifications</p>
+                    </div>
+                </div>
             </div>
-            <div class="panel-block">
-                <p class="control has-icons-left">
-                    <input class="input" type="text" placeholder="Search">
-                </p>
-            </div>
-            <div class="panel-block is-flex is-justify-content-center is-flex-direction-column">
-                <table class="table is-bordered is-striped is-truncated">
-                    <thead>
-                    <tr>
-                        <th width="150">From</th>
-                        <th width="150">To</th>
-                        <th width="100">Amount</th>
-                        <th width="100">Trace</th>
-                        <th width="100">Date</th>
-                        <th width="100">Status</th>
-                        <th width="163">Disputed</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in transactions %}
-                        <tr>
-                            <td>{{ item.from }}</td>
-                            <td>{{ item.to }}</td>
-                            <td>{{ item.amount }}</td>
-                            <td>{{ item.trace }}</td>
-                            <td>{{ item.date }}</td>
-                            <td>{{ item.status }}</td>
-                            <td>{{ item.disputed }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                    <a class="pagination-previous">Previous</a>
-                    <a class="pagination-next">Next</a>
-                    <ul class="pagination-list">
-                        {% if transactions.has_previous %}
-                            <li><a class="pagination-link" aria-label="Goto page 45"
-                                   href="?page={{ transactions.previous_page_number }}">Prev</a></li>
-                        {% endif %}
-                        <li><a class="pagination-link is-current" aria-label="Page 46"
-                               aria-current="page">{{ transactions.number }}</a></li>
-                        {% if transactions.has_next %}
-                            <li><a class="pagination-link" aria-label="Goto page 47"
-                                   href="?page={{ transactions.next_page_number }}">Next</a></li>
-                        {% endif %}
-                    </ul>
-                </nav>
+        </div>
+        <div class="row">
+            <div class="column">
+                <div class="panel">
+                    <div class="panel-heading">
+                        Transactions
+                    </div>
+                    <div class="panel-block">
+                        <p class="control has-icons-left">
+                            <input class="input" type="text" placeholder="Search">
+                        </p>
+                    </div>
+                    <div class="panel-block is-flex is-justify-content-center is-flex-direction-column">
+                        <table class="table is-bordered is-striped is-truncated">
+                            <thead>
+                            <tr>
+                                <th width="100">From</th>
+                                <th width="100">To</th>
+                                <th width="100">Amount</th>
+                                <th width="350">Trace</th>
+                                <th width="150">Date</th>
+                                <th width="100">Status</th>
+                                <th width="163">Disputed</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in transactions %}
+                                <tr>
+                                    <td>{{ item.money_from | capfirst }}</td>
+                                    <td>{{ item.money_to | capfirst }}</td>
+                                    <td>{{ item.amount }}</td>
+                                    <td>{{ item.uuid }}</td>
+                                    <td>{{ item.transaction_date }}</td>
+                                    {% if item.status == True %}
+                                        <td><span class="tag is-success">Success</span></td>
+                                    {% else %}
+                                        <td><span class="tag is-danger">Failed</span></td>
+                                    {% endif %}
+                                    {% if item.committed == True %}
+                                        <td><span class="tag is-danger">Yes</span></td>
+                                    {% else %}
+                                        <td><span class="tag is-info">No</span></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                            <a class="pagination-previous">Previous</a>
+                            <a class="pagination-next">Next</a>
+                            <ul class="pagination-list">
+                                {% if transactions.has_previous %}
+                                    <li><a class="pagination-link" aria-label="Goto page 45"
+                                           href="?page={{ transactions.previous_page_number }}">Prev</a></li>
+                                {% endif %}
+                                <li><a class="pagination-link is-current" aria-label="Page 46"
+                                       aria-current="page">{{ transactions.number }}</a></li>
+                                {% if transactions.has_next %}
+                                    <li><a class="pagination-link" aria-label="Goto page 47"
+                                           href="?page={{ transactions.next_page_number }}">Next</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

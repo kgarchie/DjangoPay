@@ -1,6 +1,6 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% block title %}
-    <title>Log In</title>
+    <title>Sign Up</title>
 {% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
             {% csrf_token %}
             {% if error %}
                 <div class="help is-danger">
-                    {{ error }}
+                    <p>{{ error }}</p>
                 </div>
             {% endif %}
             {% for field in form %}
@@ -38,8 +38,13 @@
                         </div>
                     {% else %}
                         <div class="control">
-                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
-                                   value="{{ field.value }}" class="input" id="{{ field.id_for_label }}">
+                            <input type="{{ field.field.widget.input_type }}"
+                                   name="{{ field.name }}"
+                                    {% if field.value %}
+                                   value="{{ field.value }}"
+                                    {% endif %}
+                                   class="input"
+                                   id="{{ field.id_for_label }}">
                         </div>
                     {% endif %}
                     {% for error in field.errors %}
@@ -49,6 +54,16 @@
                     {% endfor %}
                 </div>
             {% endfor %}
+            <div class="field">
+                <small class="is-info">
+                    Not a member? <a href="{% url 'pay_app:register' %}">Sign Up</a>
+                </small>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button type="submit" class="button is-link">Log In</button>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}

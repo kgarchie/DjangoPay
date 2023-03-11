@@ -1,8 +1,71 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
+
 {% block title %}
     <title>Sign Up</title>
 {% endblock %}
 
 {% block content %}
-
+    <div class="column is-4 ml-auto mr-auto">
+        <form method="post">
+            {% csrf_token %}
+            {% if error %}
+                <div class="help is-danger">
+                    <p>{{ error.title }}</p>
+                    <small>{{ error.message }}</small>
+                </div>
+            {% endif %}
+            {% for field in form %}
+                <div class="field">
+                    <label for="{{ field.id_for_label }}" class="label">{{ field.label }}</label>
+                    {% if field.help_text %}
+                        <p class="help">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="{{ field.name }}" {% if field.value %}checked{% endif %}
+                                       class="input">
+                                {{ field.label }}
+                            </label>
+                        </div>
+                    {% elif field.field.widget.input_type == 'select' %}
+                        <div class="select">
+                            <select name="{{ field.name }}">
+                                {% for choice in field.field.choices %}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == field.value %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% else %}
+                        <div class="control">
+                            <input type="{{ field.field.widget.input_type }}"
+                                   name="{{ field.name }}"
+                                    {% if field.value %}
+                                   value="{{ field.value }}"
+                                    {% endif %}
+                                   class="input"
+                                   id="{{ field.id_for_label }}">
+                        </div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="help is-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="field">
+                <small class="is-info">
+                    Already have an account? <a href="{% url 'pay_app:login' %}">Login</a>
+                </small>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button type="submit" class="button is-link">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}
