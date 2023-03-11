@@ -15,6 +15,7 @@ def index(request):
     return render(request, 'index.html')
 
 
+@login_required(login_url='/login/')
 def make_payment(request):
     form = SendMoneyForm(user=request.user)
     context = {'form': form}
