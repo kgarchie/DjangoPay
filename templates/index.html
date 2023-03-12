@@ -13,8 +13,8 @@
                         Hello there {{ user.username | capfirst }}!
                     </p>
                     <p class="subtitle">
-                        {% if user.notifications %}
-                            You have {{ user.notifications.count }} notifications.
+                        {% if user.get_unread_notifications %}
+                            You have {{ user.get_unread_notifications.count }} notifications.
                         {% else %}
                             You have no notifications.
                         {% endif %}
