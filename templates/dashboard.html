@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'side_nav.html' %}>
+    {% include 'side_nav.html' %}
     <div class="column">
         <div class="row">
             <div class="section profile-heading">
@@ -132,7 +132,14 @@
             let uuid = item.getAttribute('data-uuid');
             const amount = item.innerText;
             const converted_amount = currency_conversion(amount, 'GBP', '{{ user.currency.code }}');
-            item.innerText = await converted_amount.converted_value;
+            converted_amount.then(
+                (data) => {
+                    item.innerText = data.converted_value;
+                }
+            ).catch((error) => {
+                    console.log(error);
+                }
+            )
         });
 
         const balance = document.getElementById('balance');
