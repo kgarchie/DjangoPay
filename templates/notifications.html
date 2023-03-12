@@ -26,21 +26,23 @@
                         </div>
                     </div>
 
-                    <div class="list-item-controls is-hidden-mobile mt-2 ml-auto">
-                        <div class="buttons">
-                            <a class="button is-danger" href="{% url 'pay_app:reject-payment' item.id %}">
-                                <span class="icon"><i class="fas fa-times-square"></i></span>
-                            </a>
+                    {% if item.transaction.money_from.id == user.id %}
+                        <div class="list-item-controls is-hidden-mobile mt-2 ml-auto">
+                            <div class="buttons">
+                                <a class="button is-danger" href="{% url 'pay_app:reject-payment' item.id %}">
+                                    <span class="icon"><i class="fas fa-times-square"></i></span>
+                                </a>
 
-                            <a class="button is-warning" href="{% url 'pay_app:notification' item.id %}">
-                                <span class="icon"><i class="fas fa-trash"></i></span>
-                            </a>
+                                <a class="button is-warning" href="{% url 'pay_app:notification' item.id %}">
+                                    <span class="icon"><i class="fas fa-trash"></i></span>
+                                </a>
 
-                            <a class="button is-success" href="{% url 'pay_app:accept-payment' item.id %}">
-                                <span class="icon"><i class="fas fa-check-square"></i></span>
-                            </a>
+                                <a class="button is-success" href="{% url 'pay_app:accept-payment' item.id %}">
+                                    <span class="icon"><i class="fas fa-check-square"></i></span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </li>
                 <hr>
             {% endfor %}

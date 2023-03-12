@@ -53,7 +53,7 @@ def make_payment(request):
             transaction = Transaction.objects.get(id=form.instance.id)
             transaction.status = True
             transaction.save()
-            return redirect('pay_app:dashboard')
+            return redirect('pay_app:success')
         else:
             if form.errors:
                 context['error'] = form.errors
@@ -83,7 +83,7 @@ def request_payment(request):
 @receiver(post_save, sender=Transaction)
 def send_notification(instance, created, **kwargs):
     if created:
-        if instance.status:
+        if instance.status is True:
             Notification.objects.create(
                 transaction=instance,
                 receiver=instance.money_from,
@@ -105,8 +105,8 @@ def send_notification(instance, created, **kwargs):
             )
             Notification.objects.create(
                 transaction=instance,
-                sender=instance.money_to,
-                receiver=instance.money_from,
+                receiver=instance.money_to,
+                sender=instance.money_from,
                 message=f'You have sent a request of {instance.amount} payment to {instance.money_from.username}'
             )
 
@@ -244,6 +244,9 @@ def accept_payment(request, notification_id):
 @login_required(login_url='/login/')
 def reject_payment(request, notification_id):
     transaction = Transaction.objects.get(id=Notification.objects.get(id=notification_id).transaction.id)
+    notification = Notification.objects.get(id=notification_id)
+    notification.read = True
+    notification.save()
     transaction.status = False
     transaction.committed = False
     transaction.save()

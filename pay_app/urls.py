@@ -16,4 +16,5 @@ urlpatterns = [
     path('reject-payment/<int:notification_id>/', views.reject_payment, name='reject-payment'),
     path('success/', views.success, name='success'),
     path('request-payment/', views.request_payment, name='request-payment'),
+    path('success/', views.success, name='success'),
 ]
