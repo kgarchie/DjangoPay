@@ -18,13 +18,13 @@
                     </div>
                     <div class="column is-4-tablet is-10-mobile name">
                         <p>
-                            <span class="title is-bold mt-auto mb-auto">{{ user.username }}</span>
+                            <span class="title is-bold mt-6">{{ user.username }}</span>
                             <br>
                         </p>
                     </div>
                     <div class="column is-2-tablet is-4-mobile has-text-centered">
-                        <p class="stat-val">{{ user.balance }}</p>
-                        <p class="stat-key">Balance</p>
+                        <p class="stat-val" id="balance">{{ user.balance }}</p>
+                        <p class="stat-key">Balance {{ user.currency.code }} </p>
                     </div>
                     <div class="column is-2-tablet is-4-mobile has-text-centered">
                         <p class="stat-val">{{ user.get_transactions.count }}</p>
@@ -66,18 +66,22 @@
                                 <tr>
                                     <td>{{ item.money_from | capfirst }}</td>
                                     <td>{{ item.money_to | capfirst }}</td>
-                                    <td>{{ item.amount }}</td>
+                                    <td data-uuid="{{ item.uuid }}">{{ item.amount }}</td>
                                     <td>{{ item.uuid }}</td>
                                     <td>{{ item.transaction_date }}</td>
                                     {% if item.status == True %}
                                         <td><span class="tag is-success">Success</span></td>
                                     {% else %}
-                                        <td><span class="tag is-danger">Failed</span></td>
+                                        {% if item.committed == False %}
+                                            <td><span class="tag is-danger">Failed</span></td>
+                                        {% else %}
+                                            <td><span class="tag is-warning">Pending</span></td>
+                                        {% endif %}
                                     {% endif %}
                                     {% if item.committed == True %}
-                                        <td><span class="tag is-danger">Yes</span></td>
-                                    {% else %}
                                         <td><span class="tag is-info">No</span></td>
+                                    {% else %}
+                                        <td><span class="tag is-danger">Disputed</span></td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}
@@ -88,10 +92,10 @@
                             <a class="pagination-next">Next</a>
                             <ul class="pagination-list">
                                 {% if transactions.has_previous %}
-                                    <li><a class="pagination-link" aria-label="Goto page 45"
+                                    <li><a class="pagination-link"
                                            href="?page={{ transactions.previous_page_number }}">Prev</a></li>
                                 {% endif %}
-                                <li><a class="pagination-link is-current" aria-label="Page 46"
+                                <li><a class="pagination-link is-current"
                                        aria-current="page">{{ transactions.number }}</a></li>
                                 {% if transactions.has_next %}
                                     <li><a class="pagination-link" aria-label="Goto page 47"
@@ -104,4 +108,39 @@
             </div>
         </div>
     </div>
+    <script>
+        const host = window.location.host;
+        const protocol = window.location.protocol;
+
+        const currency_conversion_url = protocol + '//' + host + '/api/conversion';
+
+        const currency_conversion = (amount, from, to) => {
+            const url = currency_conversion_url + '/' + from + '/' + to + '/' + amount;
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    return data;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        };
+
+        const table_data_uuid = document.querySelectorAll('[data-uuid]');
+        table_data_uuid.forEach(async (item) => {
+            let uuid = item.getAttribute('data-uuid');
+            const amount = item.innerText;
+            const converted_amount = currency_conversion(amount, 'GBP', '{{ user.currency.code }}');
+            item.innerText = await converted_amount.converted_value;
+        });
+
+        const balance = document.getElementById('balance');
+        const converted_balance = currency_conversion(balance.innerText, 'GBP', '{{ user.currency.code }}');
+        converted_balance.then((data) => {
+            balance.innerText = data.converted_value;
+        }).catch((error) => {
+            console.log(error);
+        });
+    </script>
 {% endblock %}

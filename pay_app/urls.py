@@ -11,7 +11,9 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
     path('notifications/', views.notifications, name='notifications'),
-    path('accept-payment/<int:transaction_id>/', views.accept_payment, name='accept-payment'),
-    path('reject-payment/<int:transaction_id>/', views.reject_payment, name='reject-payment'),
+    path('notification/<int:notification_id>/read/', views.notifications, name='notification'),
+    path('accept-payment/<int:notification_id>/', views.accept_payment, name='accept-payment'),
+    path('reject-payment/<int:notification_id>/', views.reject_payment, name='reject-payment'),
     path('success/', views.success, name='success'),
+    path('request-payment/', views.request_payment, name='request-payment'),
 ]

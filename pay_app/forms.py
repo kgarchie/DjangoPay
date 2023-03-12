@@ -15,11 +15,22 @@ class SendMoneyForm(forms.ModelForm):
         self.fields['money_to'].queryset = User.objects.exclude(id=self.user.id)
 
 
+class RequestPaymentForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['money_from', 'amount']
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(RequestPaymentForm, self).__init__(*args, **kwargs)
+        self.fields['money_from'].queryset = User.objects.exclude(id=self.user.id)
+
+
 # create a register form
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'currency']
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)

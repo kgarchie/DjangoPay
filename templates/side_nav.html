@@ -8,7 +8,7 @@
             <li><a id="notifications" href="{% url 'pay_app:notifications' %}">Notifications <span class="notification-bubble">{{ user.get_unread_notifications.count }}</span></a></li>
             <li><a>Other</a>
                 <ul>
-                    <li><a href="" id="pending_money">Request Payment</a></li>
+                    <li><a href="{% url 'pay_app:request-payment' %}" id="pending_money">Request Payment</a></li>
                     {% if user.is_admin %}
                         <li><a href="" id="admin_view_transactions">All Site Transactions</a></li>
                     {% endif %}

@@ -5,5 +5,5 @@ from . import views, \
 app_name = 'currency_conversion_api'
 
 urlpatterns = [
-    path('convert/<str:from>/<str:to>/<float:amount>', views.CurrencyConversion.as_view()),
+    path('conversion/<str:currency_from>/<str:currency_to>/<float:amount>', views.CurrencyConversion.as_view()),
 ]

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 import uuid
+from currency_conversion_api.models import Currency
 
 
 # Create your models here.
@@ -8,6 +9,7 @@ import uuid
 class User(DjangoUser):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     balance = models.IntegerField(default=10000)
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -30,8 +32,8 @@ class Transaction(models.Model):
     money_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='money_from')
     money_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='money_to')
     amount = models.IntegerField()
-    status = models.BooleanField(default=False)  # Internal status of the transaction, can be revoked by admin
-    committed = models.BooleanField(default=False)  # True if transaction is accepted by the receiver
+    status = models.BooleanField(default=False)
+    committed = models.BooleanField(default=True)
     transaction_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -39,7 +41,7 @@ class Transaction(models.Model):
 
 
 class Notification(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, null=True, blank=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     message = models.CharField(max_length=100)
