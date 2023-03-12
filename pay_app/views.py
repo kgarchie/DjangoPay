@@ -255,3 +255,7 @@ def reject_payment(request, notification_id):
 
 def success(request):
     return render(request, 'transaction_successful.html')
+
+
+def about(request):
+    return render(request, 'about.html')
